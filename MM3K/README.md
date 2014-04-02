@@ -1,6 +1,8 @@
 Monkey Man 3000
 ===============
 
+The final class project.
+
 A side scroller, similar to Super Mario Bros., with modern graphics. Supports one or two players.
 
 Hero is a monkey that’s trying to rescue baby monkeys that have been captured by other animals in the zoo. After rescuing the babies, the hero faces the Zoo Keeper before escaping to the outside world.
@@ -31,3 +33,4 @@ In the final level, the hero works his way through the zoo grounds. Boss is zook
 Notes:
 
 - The title screen should be interactive. A mini-game that you can play before you actually press start. Perhaps you’re a caged monkey flinging poo at passersby?
+- The placeholder art is from the web. Final game will include original assets exclusively.
