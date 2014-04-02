@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:47602dc07b7ea713e574f5e654d667e0:e94be7d237e09e372a44f83a9b840c89:a3c246832ea35f0bdda766159aff8361$ -->
+<!--Format:
+n  => name of the sprite
+x  => sprite x pos in texture
+y  => sprite y pos in texture
+w  => sprite width (may be trimmed)
+h  => sprite height (may be trimmed)
+oX => sprite's x-corner offset (only available if trimmed)
+oY => sprite's y-corner offset (only available if trimmed)
+oW => sprite's original width (only available if trimmed)
+oH => sprite's original height (only available if trimmed)
+r => 'y' only set if sprite is rotated
+-->
+<TextureAtlas imagePath="sprites.png" width="512" height="512">
+  <sprite n="enemyShip" x="258" y="115" w="98" h="50"/>
+    <sprite n="enemyUFO" x="358" y="156" w="91" h="91"/>
+  <sprite n="laserGreen" x="497" y="37" w="9" h="33"/>
+    <sprite n="laserGreenShot" x="451" y="212" w="56" h="54"/>
+  <sprite n="laserRed" x="497" y="2" w="9" h="33"/>
+    <sprite n="laserRedShot" x="451" y="156" w="56" h="54"/>
+    <sprite n="life" x="358" y="115" w="35" h="27"/>
+  <sprite n="meteorBig" x="258" y="2" w="136" h="111"/>
+  <sprite n="meteorSmall" x="350" y="249" w="44" h="42"/>
+  <sprite n="player" x="396" y="79" w="99" h="75"/>
+    <sprite n="playerDamaged" x="396" y="2" w="99" h="75"/>
+  <sprite n="playerLeft" x="258" y="246" w="90" h="77"/>
+  <sprite n="playerRight" x="258" y="167" w="90" h="77"/>
+  <sprite n="starBackground" x="2" y="2" w="254" h="256"/>
+</TextureAtlas>

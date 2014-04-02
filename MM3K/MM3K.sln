@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MM3K", "MM3K\MM3K\MM3K.csproj", "{E310272F-8487-4F0D-AE44-081AF89CD7B6}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "MM3KContent", "MM3K\MM3KContent\MM3KContent.contentproj", "{7DDD50C3-B1C2-4782-9A70-83C3FCD3509D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E310272F-8487-4F0D-AE44-081AF89CD7B6}.Debug|x86.ActiveCfg = Debug|x86
+		{E310272F-8487-4F0D-AE44-081AF89CD7B6}.Debug|x86.Build.0 = Debug|x86
+		{E310272F-8487-4F0D-AE44-081AF89CD7B6}.Release|x86.ActiveCfg = Release|x86
+		{E310272F-8487-4F0D-AE44-081AF89CD7B6}.Release|x86.Build.0 = Release|x86
+		{7DDD50C3-B1C2-4782-9A70-83C3FCD3509D}.Debug|x86.ActiveCfg = Debug|x86
+		{7DDD50C3-B1C2-4782-9A70-83C3FCD3509D}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
