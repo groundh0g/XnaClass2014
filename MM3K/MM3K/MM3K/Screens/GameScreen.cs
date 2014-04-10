@@ -18,7 +18,28 @@ namespace MM3K.Screens
         Texture2D texMonkey;
         Rectangle rectGround = new Rectangle(128, 128, 128, 128);
 
-        public const float GROUND_LEVEL_Y = 298;
+        Rectangle[] rectRunFrames = 
+        {
+            new Rectangle(59 + 0 * 64, 64, 64, 64),
+            new Rectangle(59 + 1 * 64, 64, 64, 64),
+            new Rectangle(59 + 2 * 64, 64, 64, 64),
+            new Rectangle(59 + 3 * 64, 64, 64, 64),
+            new Rectangle(59 + 4 * 64, 64, 64, 64),
+            new Rectangle(59 + 5 * 64, 64, 64, 64),
+        };
+        int currentRunFrame = 0;
+        const double RUN_FRAME_DURATION = 0.125;
+        double elapsedRunFrameDuration = RUN_FRAME_DURATION;
+
+        Rectangle rectStill = new Rectangle(59 + 5 * 64, 0, 64, 64);
+
+        Rectangle[] rectJumpFrames = 
+        {
+            new Rectangle(59 + 0 * 64, 0, 64, 64),
+            new Rectangle(59 + 1 * 64, 0, 64, 64),
+        };
+
+        public const float GROUND_LEVEL_Y = 298 + 56;
         public const float GRAVITY = 600.0f;
         public float accelerationY = 0.0f;
 
@@ -31,17 +52,28 @@ namespace MM3K.Screens
         Vector2 dBaby = new Vector2(0, 0);
 
         public bool wasAPressed = true;
+        public bool isRunning = false;
         public override void Update(GameTime gameTime, GamePadState padState)
         {
             var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+            elapsedRunFrameDuration -= elapsed;
+            if (elapsedRunFrameDuration <= 0.0)
+            {
+                currentRunFrame = (currentRunFrame + 1) % rectRunFrames.Length;
+                elapsedRunFrameDuration = RUN_FRAME_DURATION;
+            }
+
+            isRunning = false;
             if (padState.DPad.Left == ButtonState.Pressed)
             {
                 locMonkey.X -= 100.0f * elapsed;
+                isRunning = true;
             }
             else if (padState.DPad.Right == ButtonState.Pressed)
             {
                 locMonkey.X += 100.0f * elapsed;
+                isRunning = true;
             }
 
             var isAPressed = 
@@ -55,14 +87,14 @@ namespace MM3K.Screens
             wasAPressed = isAPressed;
             locMonkey.Y += accelerationY * elapsed;
             accelerationY += GRAVITY * elapsed;
-            if (locMonkey.Y > GROUND_LEVEL_Y)
+            if (locMonkey.Y >= GROUND_LEVEL_Y)
             {
                 locMonkey.Y = GROUND_LEVEL_Y;
                 accelerationY = 0;
-            }
+            } 
 
             var rectBaby = new Rectangle((int)locBaby.X, (int)locBaby.Y, texBaby.Width, texBaby.Height);
-            var rectMonkey = new Rectangle((int)locMonkey.X, (int)locMonkey.Y, texMonkey.Width, texMonkey.Height);
+            var rectMonkey = new Rectangle((int)locMonkey.X, (int)locMonkey.Y, 64, 64);
 
             if (rectBaby.Intersects(rectMonkey))
             {
@@ -89,7 +121,29 @@ namespace MM3K.Screens
                 locTile.X += 90;
             }
 
-            batch.Draw(texMonkey, locMonkey, Color.White);
+            if (isRunning && accelerationY == 0)
+            {
+                batch.Draw(texMonkey, locMonkey, rectRunFrames[currentRunFrame], Color.White);
+            }
+            else
+            {
+                if (accelerationY < 0)
+                {
+
+                    batch.Draw(texMonkey, locMonkey, rectJumpFrames[0], Color.White);
+                    isRunning = false;
+                }
+                else if (accelerationY > 0)
+                {
+                    batch.Draw(texMonkey, locMonkey, rectJumpFrames[1], Color.White);
+                    isRunning = false;
+                }
+                else
+                {
+                    batch.Draw(texMonkey, locMonkey, rectStill, Color.White);
+                }
+            }
+            //batch.Draw(texMonkey, locMonkey, Color.White);
             batch.Draw(texBaby, locBaby, Color.White);
             batch.Draw(texBaddie, locBaddie, Color.White);
             batch.Draw(texBanana, locBanana, Color.White);
@@ -104,7 +158,8 @@ namespace MM3K.Screens
             texBaddie = Parent.Content.Load<Texture2D>("baddie");
             texBanana = Parent.Content.Load<Texture2D>("bananas");
             texTile = Parent.Content.Load<Texture2D>("mousers");
-            texMonkey = Parent.Content.Load<Texture2D>("monkey");
+            texMonkey = Parent.Content.Load<Texture2D>("Standupandrun");
+            //texMonkey = Parent.Content.Load<Texture2D>("monkey");
             base.Showing();
         }
 

@@ -23,6 +23,11 @@ namespace MM3K
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            this.graphics.PreferredBackBufferWidth = 800;
+            this.graphics.PreferredBackBufferHeight = 480;
+
+            //this.graphics.IsFullScreen = true;
         }
 
         /// <summary>

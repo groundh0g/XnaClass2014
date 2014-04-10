@@ -28,7 +28,7 @@ namespace MM3K.Screens
 
         public static void Draw(GameTime gameTime, SpriteBatch batch)
         {
-            batch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             CurrentScreen.Draw(gameTime, batch);
             batch.End();
         }
