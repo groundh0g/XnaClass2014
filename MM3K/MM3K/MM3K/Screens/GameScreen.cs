@@ -53,8 +53,13 @@ namespace MM3K.Screens
 
         public bool wasAPressed = true;
         public bool isRunning = false;
+        public bool isFacingLeft = false;
         public override void Update(GameTime gameTime, GamePadState padState)
         {
+            if (padState.Buttons.Back == ButtonState.Pressed)
+            {
+                ScreenManager.CurrentScreen = new TitleScreen(Parent);
+            }
             var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             elapsedRunFrameDuration -= elapsed;
@@ -69,11 +74,13 @@ namespace MM3K.Screens
             {
                 locMonkey.X -= 100.0f * elapsed;
                 isRunning = true;
+                isFacingLeft = true;
             }
             else if (padState.DPad.Right == ButtonState.Pressed)
             {
                 locMonkey.X += 100.0f * elapsed;
                 isRunning = true;
+                isFacingLeft = false;
             }
 
             var isAPressed = 
@@ -123,24 +130,59 @@ namespace MM3K.Screens
 
             if (isRunning && accelerationY == 0)
             {
-                batch.Draw(texMonkey, locMonkey, rectRunFrames[currentRunFrame], Color.White);
+                batch.Draw(
+                    texMonkey, 
+                    locMonkey, 
+                    rectRunFrames[currentRunFrame], 
+                    Color.White, 
+                    0.0f, 
+                    Vector2.Zero, 
+                    1.0f, 
+                    isFacingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 
+                    0.0f);
             }
             else
             {
                 if (accelerationY < 0)
                 {
-
-                    batch.Draw(texMonkey, locMonkey, rectJumpFrames[0], Color.White);
+                    batch.Draw(
+                        texMonkey,
+                        locMonkey,
+                        rectJumpFrames[0],
+                        Color.White,
+                        0.0f,
+                        Vector2.Zero,
+                        1.0f,
+                        isFacingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
+                        0.0f);
                     isRunning = false;
                 }
                 else if (accelerationY > 0)
                 {
-                    batch.Draw(texMonkey, locMonkey, rectJumpFrames[1], Color.White);
+                    batch.Draw(
+                        texMonkey,
+                        locMonkey,
+                        rectJumpFrames[1],
+                        Color.White,
+                        0.0f,
+                        Vector2.Zero,
+                        1.0f,
+                        isFacingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
+                        0.0f);
                     isRunning = false;
                 }
                 else
                 {
-                    batch.Draw(texMonkey, locMonkey, rectStill, Color.White);
+                    batch.Draw(
+                        texMonkey,
+                        locMonkey,
+                        rectStill,
+                        Color.White,
+                        0.0f,
+                        Vector2.Zero,
+                        1.0f,
+                        isFacingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
+                        0.0f);
                 }
             }
             //batch.Draw(texMonkey, locMonkey, Color.White);
