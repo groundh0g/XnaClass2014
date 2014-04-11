@@ -28,8 +28,8 @@ namespace MM3K.Screens
             new Rectangle(59 + 5 * 64, 64, 64, 64),
         };
         int currentRunFrame = 0;
-        const double RUN_FRAME_DURATION = 0.125;
-        double elapsedRunFrameDuration = RUN_FRAME_DURATION;
+        const double MAX_RUN_FRAME_DURATION = 0.1;
+        double elapsedRunFrameDuration = MAX_RUN_FRAME_DURATION;
 
         Rectangle rectStill = new Rectangle(59 + 5 * 64, 0, 64, 64);
 
@@ -62,25 +62,29 @@ namespace MM3K.Screens
             }
             var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+            isRunning = false;
+            float speed = padState.ThumbSticks.Left.X;
+            if (padState.DPad.Left == ButtonState.Pressed)
+            {
+                speed = -1.0f;
+            }
+            else if (padState.DPad.Right == ButtonState.Pressed)
+            {
+                speed = 1.0f;
+            }
+
+            locMonkey.X += speed * 150.0f * elapsed;
+            isRunning = speed != 0.0f;
+            if (speed != 0.0f)
+            {
+                isFacingLeft = speed < 0.0f;
+            }
+
             elapsedRunFrameDuration -= elapsed;
             if (elapsedRunFrameDuration <= 0.0)
             {
                 currentRunFrame = (currentRunFrame + 1) % rectRunFrames.Length;
-                elapsedRunFrameDuration = RUN_FRAME_DURATION;
-            }
-
-            isRunning = false;
-            if (padState.DPad.Left == ButtonState.Pressed)
-            {
-                locMonkey.X -= 100.0f * elapsed;
-                isRunning = true;
-                isFacingLeft = true;
-            }
-            else if (padState.DPad.Right == ButtonState.Pressed)
-            {
-                locMonkey.X += 100.0f * elapsed;
-                isRunning = true;
-                isFacingLeft = false;
+                elapsedRunFrameDuration = (2.0f - Math.Abs(speed)) * MAX_RUN_FRAME_DURATION;
             }
 
             var isAPressed = 
@@ -131,15 +135,15 @@ namespace MM3K.Screens
             if (isRunning && accelerationY == 0)
             {
                 batch.Draw(
-                    texMonkey, 
-                    locMonkey, 
-                    rectRunFrames[currentRunFrame], 
-                    Color.White, 
-                    0.0f, 
-                    Vector2.Zero, 
-                    1.0f, 
-                    isFacingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 
-                    0.0f);
+                    texMonkey, // texture
+                    locMonkey, // location 
+                    rectRunFrames[currentRunFrame], // source rectangle
+                    Color.White, // tint
+                    0.0f, // rotation
+                    Vector2.Zero, // origin
+                    1.0f, // scale
+                    isFacingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None, // SpriteEffect
+                    0.0f); // depth
             }
             else
             {
