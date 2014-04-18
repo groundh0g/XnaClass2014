@@ -16,6 +16,9 @@ namespace MM3K.Screens
         Texture2D texBaddie;
         Texture2D texBanana;
         Texture2D texMonkey;
+        Texture2D texShooter;
+        Texture2D texPoo;
+
         Rectangle rectGround = new Rectangle(128, 128, 128, 128);
 
         Rectangle[] rectRunFrames = 
@@ -39,9 +42,16 @@ namespace MM3K.Screens
             new Rectangle(59 + 1 * 64, 0, 64, 64),
         };
 
+        Rectangle rectShootBottom = new Rectangle(0, 0, 60, 68);
+        Rectangle rectShootTop = new Rectangle(60, 0, 88, 68);
+
+        Vector2 originShootTopRight = new Vector2(25, 53);
+        Vector2 originShootTopLeft = new Vector2(88 - 25, 53);
+
         public const float GROUND_LEVEL_Y = 298 + 56;
         public const float GRAVITY = 600.0f;
         public float accelerationY = 0.0f;
+        public Vector2 accelerationPoo = Vector2.Zero;
 
         public GameScreen(Game parent)
             : base(parent)
@@ -54,6 +64,9 @@ namespace MM3K.Screens
         public bool wasAPressed = true;
         public bool isRunning = false;
         public bool isFacingLeft = false;
+        public bool isAiming = false;
+        public float aimRadians = 0.0f;
+
         public override void Update(GameTime gameTime, GamePadState padState)
         {
             if (padState.Buttons.Back == ButtonState.Pressed)
@@ -61,6 +74,26 @@ namespace MM3K.Screens
                 ScreenManager.CurrentScreen = new TitleScreen(Parent);
             }
             var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (padState.Triggers.Right > 0.5f)
+            {
+                locPoo = locMonkey + (isFacingLeft ? originShootTopLeft + new Vector2(-32, -45) : originShootTopRight + new Vector2(5, -45));
+                accelerationPoo = new Vector2(
+                    isFacingLeft ? -10.0f : 10.0f,
+                    aimRadians * 10.0f);
+            }
+
+            locPoo += accelerationPoo;
+
+            isAiming = padState.ThumbSticks.Right.Y != 0.0f || padState.ThumbSticks.Right.X != 0.0f;
+            if (isAiming)
+            {
+                aimRadians = padState.ThumbSticks.Right.Y * 1.0f;
+                aimRadians = Math.Max(aimRadians, -0.870878f);
+                aimRadians = Math.Min(aimRadians, 0.6582773f);
+                System.Diagnostics.Debug.WriteLine(aimRadians);
+                return;
+            }
 
             isRunning = false;
             float speed = padState.ThumbSticks.Left.X;
@@ -119,6 +152,7 @@ namespace MM3K.Screens
         }
 
         Vector2 locMonkey = new Vector2(0, GROUND_LEVEL_Y);
+        Vector2 locPoo = Vector2.Zero;
         Vector2 locBaby = new Vector2(200, 375);
         Vector2 locBaddie = new Vector2(300, 360);
         Vector2 locBanana = new Vector2(400, 390);
@@ -175,6 +209,29 @@ namespace MM3K.Screens
                         0.0f);
                     isRunning = false;
                 }
+                else if (isAiming)
+                {
+                    batch.Draw(
+                        texShooter,
+                        locMonkey + (isFacingLeft ? originShootTopLeft + new Vector2(-32, 0) : originShootTopRight + new Vector2(5, 0)),
+                        rectShootTop,
+                        Color.White,
+                        aimRadians,
+                        (isFacingLeft ? originShootTopLeft : originShootTopRight),
+                        1.0f,
+                        isFacingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
+                        0.0f);
+                    batch.Draw(
+                        texShooter,
+                        locMonkey,
+                        rectShootBottom,
+                        Color.White,
+                        0.0f,
+                        Vector2.Zero,
+                        1.0f,
+                        isFacingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
+                        0.0f);
+                }
                 else
                 {
                     batch.Draw(
@@ -193,6 +250,7 @@ namespace MM3K.Screens
             batch.Draw(texBaby, locBaby, Color.White);
             batch.Draw(texBaddie, locBaddie, Color.White);
             batch.Draw(texBanana, locBanana, Color.White);
+            batch.Draw(texPoo, locPoo, Color.White);
             //System.Diagnostics.Debug.WriteLine(locMonkey.ToString());
 
             base.Draw(gameTime, batch);
@@ -205,7 +263,8 @@ namespace MM3K.Screens
             texBanana = Parent.Content.Load<Texture2D>("bananas");
             texTile = Parent.Content.Load<Texture2D>("mousers");
             texMonkey = Parent.Content.Load<Texture2D>("Standupandrun");
-            //texMonkey = Parent.Content.Load<Texture2D>("monkey");
+            texShooter = Parent.Content.Load<Texture2D>("shooter");
+            texPoo = Parent.Content.Load<Texture2D>("poo");
             base.Showing();
         }
 
